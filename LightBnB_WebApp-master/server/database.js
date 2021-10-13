@@ -98,7 +98,7 @@ exports.getAllReservations = getAllReservations;
   const queryParams = [];
 
   let queryString = `
-    SELECT properties.*, AVG (property_reviews.rating) as average_rating
+    SELECT properties.*, AVG (property_reviews.rating) as average_rating, count(property_reviews.rating) as review_count
     FROM properties
     LEFT JOIN property_reviews ON properties.id = property_id
   `;
@@ -202,15 +202,34 @@ exports.getAllProperties = getAllProperties;
 
 exports.addProperty = addProperty;
 
+
 const addReservation = function(reservation) {
   /*
    * Adds a reservation from a specific user to the database
    */
-  return pool.query(`
-    INSERT INTO reservations (start_date, end_date, property_id, guest_id)
-    VALUES ($1, $2, $3, $4) RETURNING *;
-  `, [reservation.start_date, reservation.end_date, reservation.property_id, reservation.guest_id])
-  .then(res => res.rows[0])
+  return pool
+    .query(`
+      INSERT INTO reservations (start_date, end_date, property_id, guest_id)
+      VALUES ($1, $2, $3, $4) RETURNING *;
+      `, [reservation.start_date, reservation.end_date, reservation.property_id, reservation.guest_id])
+    .then(res => res.rows[0])
 }
 
 exports.addReservation = addReservation;
+
+
+const getReviewsByProperty = function(propertyId) {
+  const queryString = `
+    SELECT property_reviews.id, property_reviews.rating AS review_rating, property_reviews.message AS review_text, 
+    users.name, properties.title AS property_title, reservations.start_date, reservations.end_date
+    FROM property_reviews
+    JOIN reservations ON reservations.id = property_reviews.reservation_id  
+    JOIN properties ON properties.id = property_reviews.property_id
+    WHERE properties.id = $1
+    ORDER BY reservations.start_date ASC;
+  `
+  const queryParams = [propertyId];
+  return pool.query(queryString, queryParams).then(res => res.rows)
+}
+
+exports.getReviewsByProperty = getReviewsByProperty;
