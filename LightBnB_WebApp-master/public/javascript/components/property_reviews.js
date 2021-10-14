@@ -7,7 +7,6 @@ $(() => {
 
   window.$propertyReviews = $propertyReviews;
 
-  // declaring an empty object to add methods onto
   window.propertyReviews = {}
 
   function clearReviews() {

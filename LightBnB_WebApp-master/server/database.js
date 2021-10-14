@@ -223,9 +223,7 @@ const getIndividualReservation = function(reservationId) {
 exports.getIndividualReservation = getIndividualReservation;
 
 
-//
-//  Gets upcoming reservations
-//
+
 const getUpcomingReservations = function(guest_id, limit = 10) {
   const queryString = `
   SELECT properties.*, reservations.*, avg(rating) as average_rating
@@ -246,7 +244,6 @@ exports.getUpcomingReservations = getUpcomingReservations;
 
 
 const updateReservation = function(reservationData) {
-  // base string
   let queryString = `UPDATE reservations SET `;
   const queryParams = [];
   if (reservationData.start_date) {
@@ -270,17 +267,16 @@ const updateReservation = function(reservationData) {
 
 exports.updateReservation = updateReservation;
 
-//
-//  Deletes an existing reservation
-//
-const deleteReservation = function(reservationId) {
 
+const deleteReservation = function(reservationId) {
+  const queryParams = [reservationId];
+  const queryString = `DELETE FROM reservations WHERE id = $1`;
+  return pool.query(queryString, queryParams)
+    .then(() => console.log("Successfully deleted!"))
+    .catch(() => console.error(err));
 }
 
-
-
-
-
+exports.deleteReservation = deleteReservation;
 
 
 const getReviewsByProperty = function(propertyId) {
@@ -298,6 +294,7 @@ const getReviewsByProperty = function(propertyId) {
 }
 
 exports.getReviewsByProperty = getReviewsByProperty;
+
 
 const addReview = function(review) {
   const queryString = `
