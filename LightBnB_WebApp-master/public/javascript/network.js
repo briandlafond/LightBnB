@@ -68,6 +68,21 @@ const submitReservation = function(data) {
   })
 }
 
+function getIndividualReservation(reservationId) {
+  let url = `/api/reservations/${reservationId}`
+  return $.ajax({
+    url,
+  })
+}
+
+const updateReservation = function(data) {
+  return $.ajax({
+    method: "POST",
+    url: `/api/reservations/${data.reservation_id}`,
+    data,
+  })
+}
+
 const getReviewsByProperty = function(propertyId) {
   const url = `api/reviews/${propertyId}`;
   return $.ajax({
