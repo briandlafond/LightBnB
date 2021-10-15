@@ -76,7 +76,7 @@ exports.addUser = addUser;
   JOIN properties ON reservations.property_id = properties.id
   JOIN property_reviews ON properties.id = property_reviews.property_id 
   WHERE reservations.guest_id = $1
-  AND reservations.start_date > now()::date
+  AND reservations.start_date < now()::date
   GROUP BY properties.id, reservations.id
   ORDER BY reservations.start_date
   LIMIT $2;`;
@@ -284,7 +284,8 @@ const getReviewsByProperty = function(propertyId) {
     SELECT property_reviews.id, property_reviews.rating AS review_rating, property_reviews.message AS review_text, 
     users.name, properties.title AS property_title, reservations.start_date, reservations.end_date
     FROM property_reviews
-    JOIN reservations ON reservations.id = property_reviews.reservation_id  
+    JOIN reservations ON reservations.id = property_reviews.reservation_id
+    JOIN users ON users.id = property_reviews.guest_id  
     JOIN properties ON properties.id = property_reviews.property_id
     WHERE properties.id = $1
     ORDER BY reservations.start_date ASC;
