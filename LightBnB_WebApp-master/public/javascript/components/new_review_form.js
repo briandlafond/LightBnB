@@ -14,7 +14,7 @@ $(() => {
       <div id="datatag" class="hidden"></div>
       <button type="submit">Submit</button>
     </form>
-  `)
+  `);
 
   $newReviewForm.on('submit', function(event) {
     event.preventDefault();
@@ -25,15 +25,15 @@ $(() => {
     $("#new-review-body").val("");
     if (reviewRating && reservationId) {
       getIndividualReservation(reservationId)
-      .then(data => {
-        const dataObj = {...data, reservationId: data.id, message: reviewBody, rating: reviewRating};
-        submitReview(dataObj)
-        .then(result => {
-          views_manager.show('listings');
+        .then(data => {
+          const dataObj = {...data, reservationId: data.id, message: reviewBody, rating: reviewRating};
+          submitReview(dataObj)
+            .then(result => {
+              views_manager.show('listings');
+            });
         });
-      })
     }
-  })
+  });
 
   window.$newReviewForm = $newReviewForm;
   

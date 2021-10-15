@@ -22,6 +22,7 @@ $(() => {
         </div>
       </form>
   `);
+  
   window.$signUpForm = $signUpForm;
 
   $signUpForm.on('submit', function(event) {

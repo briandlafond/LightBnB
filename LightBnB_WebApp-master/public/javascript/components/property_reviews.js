@@ -7,7 +7,7 @@ $(() => {
 
   window.$propertyReviews = $propertyReviews;
 
-  window.propertyReviews = {}
+  window.propertyReviews = {};
 
   function clearReviews() {
     $propertyReviews.empty();
@@ -27,7 +27,7 @@ $(() => {
           <p>Stay from ${moment(start_date).format('ll')} to ${moment(end_date).format('ll')}</p>
           <p>${review_text}</p> 
         </section>
-      </article>`
+      </article>`;
     }).join('');
     $propertyReviews.append(reviewHtml);
     $propertyReviews.append(`<span class="property-reviews__return">Return to Listings</span>`);
@@ -35,9 +35,9 @@ $(() => {
     $('.property-reviews__return').on('click', function() {
       views_manager.show('none');
       views_manager.show('listings');
-    })
+    });
   }
   
   window.propertyReviews.addReviews = addReviews;
 
-})
+});
